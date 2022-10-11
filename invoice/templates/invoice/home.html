@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <script
+            defer
+            src="https://unpkg.com/alpinejs@3.10.4/dist/cdn.min.js"
+    ></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .container {
+            margin: auto;
+            max-width: 1100px;
+            overflow: auto;
+            padding: 0 20px;
+        }
+
+        .btn {
+            display: inline-block;
+            font-size: 18px;
+            color: #fff;
+            background: #333;
+            padding: 13px 20px;
+            border: none;
+            cursor: pointer;
+        }
+
+        /* Navbar */
+        #navbar {
+            background: #333;
+            color: #fff;
+            overflow: auto;
+        }
+
+        #navbar a {
+            color: #fff;
+        }
+
+        #navbar h1 {
+            float: left;
+            padding-top: 20px;
+        }
+
+        #navbar ul {
+            list-style: none;
+            float: right;
+        }
+
+        #navbar ul li {
+            float: left;
+        }
+
+        #navbar ul li a {
+            display: block;
+            padding: 20px;
+            text-align: center;
+        }
+
+        #navbar ul li a:hover,
+        #navbar ul li a.current {
+            background: #444;
+            color: #f7c08a;
+            border-radius: 20%;
+        }
+
+    </style>
+    <title>Invoice-generator</title>
+</head>
+<body>
+
+<header>
+    <nav id="navbar">
+        <div class="container">
+            <h1 class="logo"><a href="home.html">Invoice Generator</a></h1>
+            <ul>
+                <li><a href="help.html">help</a></li>
+                <li><a href="Guide.html">Invoice Guide</a></li>
+                <li><a href="signim.html">Sign In</a></li>
+                <li><a class="current" href="signup.html">Signup</a></li>
+
+            </ul>
+        </div>
+    </nav>
+
+</header>
+
+<div class="border-t-8 border-gray-700 h-7"></div>
+<div
+        class="container mx-auto py-6 px-4"
+        x-data="invoices()"
+        x-init="generateInvoiceNumber(111111, 999999);"
+        x-cloak
+>
+    <div class="flex justify-between">
+        <h2 class="text-2xl font-bold mb-6 pb-2 tracking-wider uppercase">Invoice</h2>
+    </div>
+
+    <div>
+        <div class="w-32 h-32 mb-1 border rounded-lg overflow-hidden relative bg-gray-100">
+            <img id="image" class="object-cover w-full h-32" src="https://placehold.co/300x300/e2e8f0/e2e8f0"/>
+
+            <div class="absolute top-0 left-0 right-0 bottom-0 w-full block cursor-pointer flex items-center justify-center"
+                 onClick="document.getElementById('fileInput').click()">
+                <button type="button"
+                        style="background-color: rgba(255, 255, 255, 0.65)"
+                        class="hover:bg-gray-100 text-gray-700 font-semibold py-2 px-4 text-sm border border-gray-300 rounded-lg shadow-sm"
+                >
+                    + Add Logo
+                </button>
+            </div>
+        </div>
+        <input name="photo" id="fileInput" accept="image/*" class="hidden" type="file" onChange="let file = this.files[0];
+					var reader = new FileReader();
+
+					reader.onload = function (e) {
+						document.getElementById('image').src = e.target.result;
+						document.getElementById('image2').src = e.target.result;
+					};
+
+					reader.readAsDataURL(file);
+				">
+    </div>
+    <div class="flex flex-wrap -mx-3 mb-9">
+        <div class="w-full md:w-1/2 px-3 mb-6 md:mb-5">
+            <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-first-name">
+
+            </label>
+            <input class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
+                   id="grid-first-name" type="text" placeholder="Who is this invoice from ?">
+            <p class="text-gray-600 text-xs italic">required</p>
+
+
+            <div class="flex flex-wrap -mx-3 mb-6">
+                <div class="w-full md:w-1/2 px-3 mb-6 md:mb-0">
+                    <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+                           for="grid-first-name">
+                        Bill TO
+                    </label>
+                    <input class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
+                           id="grid-first-name" type="text" placeholder="Who is this invoice to ?">
+                    <p class="text-gray-600 text-xs italic">required</p>
+                </div>
+                <div class="w-full md:w-1/2 px-3">
+                    <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+                           for="grid-last-name">
+                        Ship To
+                    </label>
+                    <input class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                           id="grid-last-name" type="text" placeholder="">
+                    <p class="text-gray-600 text-xs italic">optional</p>
+                </div>
+
+            </div>
+
+            <div class="flex flex-wrap -mx-3 mb-6">
+                <div class="w-full md:w1/2 px-5 mb-6 md:mb-0">
+                    <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+                           for="grid-first-name">
+                        Invoice Date
+                    </label>
+                    <input class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                           id="grid-first-name" type="date" placeholder="Jane">
+                </div>
+                <div class="w-full md:w1/2 px-5">
+                    <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+                           for="grid-last-name">
+                        Due Date
+                    </label>
+                    <input class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                           id="grid-last-name" type="date" placeholder="Doe">
+                </div>
+                <!-- payment terms  -->
+                <div class="w-full md:w1/2 px-5">
+                    <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+                           for="grid-last-name">
+                        Payment Terms
+                    </label>
+                    <input class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                           id="grid-last-name" type="text" placeholder="">
+                </div>
+                <div class="w-full md:w1/2 px-5">
+                    <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+                           for="grid-last-name">
+                        Invoice Number
+                    </label>
+                    <input class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                           id="grid-last-name" type="text" placeholder="">
+                </div>
+            </div>
+
+            <div>
+
+            </div>
+        </div>
+        <div x-data="{
+      Item: JSON.parse(localStorage.getItem('Item') || '[]'),
+        addNewField() {
+          this.Item.push({});
+        },
+        removeField(Item) {
+          this.Item.splice(this.Item.indexOf(Item), 1);
+        },
+        save() {
+          localStorage.setItem('Item', JSON.stringify(this.Item));
+        },
+
+      };"
+             x-init="$watch('Item', (val) => localStorage.setItem('Item', JSON.stringify(val)))"
+             class="max-w-7xl mx-auto bg-white mt-20 p-4 border-gray-300 border-2">
+            <div class="overflow-x-auto ">
+                <table class="table-auto w-full">
+                    <thead>
+                    <tr class="bg-gray-100">
+                        <th class="px-4 py-2">Product</th>
+                        <th class="px-4 py-2">Quantity</th>
+                        <th class="px-4 py-2">Price</th>
+                        <th class="px-4 py-2">Action</th>
+                        <th class="px-4 py-2">Total</th>
+
+
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <template x-for="(Item, index) in Item" :key="index">
+                        <tr>
+                            <td class="border px-4 py-2">
+                                <input type="text" x-model="Item.item" class="w-full">
+                            </td>
+
+                            <td class="border px-4 py-2">
+                                <input type="text" x-model="Item.quantity" class="w-full">
+                            </td>
+                            <td class="border px-4 py-2">
+                                <input type="text" x-model="Item.price" class="w-full">
+                            </td>
+
+
+                            <td class="border px-4 py-2">
+                                <button @click="removeField(Item)" class="bg-red-500 text-white px-2 py-1 rounded">
+                                    Remove
+                                </button>
+                            </td>
+                            <td class="py-4 px-6">
+                                <p x-text="Item.quantity & Item.price ? Item.price * Item.quantity + ' $' : Item.price ? Item.price * 1 + ' $' : 0"></p>
+                            </td>
+
+                        </tr>
+
+
+                    </template>
+                    </tbody>
+                </table>
+                <div class="flex justify-end">
+                    <button @click="addNewField" class="bg-blue-500 text-white px-2 py-1 rounded">Add New</button>
+                </div>
+
+
+            </div>
+            subtotal : <p
+                x-text="Item.reduce((total, Item) => total + (Item.quantity & Item.price ? Item.price * Item.quantity : Item.price ? Item.price * 1 : 0), 0) + ' $'"></p>
+            <div>
+                tax 30%
+
+
+                <p x-text="Item.reduce((total, Item) => total + (Item.quantity & Item.price ? Item.price * Item.quantity : Item.price ? Item.price * 1 : 0), 0) * 0.3"></p>
+
+            </div>
+
+            <!-- discount -->
+            <div>
+                discount 10%
+                <p x-text="Item.reduce((total, Item) => total + (Item.quantity & Item.price ? Item.price * Item.quantity : Item.price ? Item.price * 1 : 0), 0) * 0.1"></p>
+                <div>
+                    shipping 5$
+                    <p x-text="Item.reduce((total, Item) => total + (Item.quantity & Item.price ? Item.price * Item.quantity : Item.price ? Item.price * 1 : 0), 0) +5"></p>
+
+                </div>
+            </div>
+            <div>
+                total after discount and tax and shipping
+                <p x-text="Item.reduce((total, Item) => total + (Item.quantity & Item.price ? Item.price * Item.quantity : Item.price ? Item.price * 1 : 0), 0) * 0.3 - Item.reduce((total, Item) => total + (Item.quantity & Item.price ? Item.price * Item.quantity : Item.price ? Item.price * 1 : 0), 0) * 0.1 + Item.reduce((total, Item) => total + (Item.quantity & Item.price ? Item.price * Item.quantity : Item.price ? Item.price * 1 : 0), 0) +5"></p>
+            </div>
+
+
+        </div>
+    </div>
+</div>
+
+
+
+</body>
+</html>
